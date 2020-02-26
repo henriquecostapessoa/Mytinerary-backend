@@ -17,11 +17,12 @@ app.use(
 app.use(cors());
 
 app.use('/cities', require('./routes/cities'))
+app.use('/itineraries', require('./routes/itineraries'))
 
 const db = require('./keys').mongoURI;
 
 const mongoose = require("mongoose");
 
-mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to Mongo DB established'))
     .catch(err => console.log(err));
