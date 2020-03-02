@@ -18,6 +18,7 @@ app.use(cors());
 
 app.use('/cities', require('./routes/cities'))
 app.use('/itineraries', require('./routes/itineraries'))
+app.use('/activities', require('./routes/activities'))
 
 const db = require('./keys').mongoURI;
 
