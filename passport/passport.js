@@ -6,6 +6,9 @@ const User = require("../model/loginModel");
 const key = require("../keys");
 const passport = require("passport")
 const router = express.Router()
+const GooogleStrategy = require ("passport-google-oauth20")
+const keys2 = require("./keys2")
+
 
 
 const opts = {};
@@ -25,15 +28,22 @@ module.exports = passport.use(
     })
   );
 
-  router.get(
-    "/",
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
-      userModel
-        .findOne({ _id: req.user.id })
-        .then(user => {
-          res.json(user);
-        })
-        .catch(err => res.status(404).json({ error: "User does not exist!" }));
-    }
-  );
+  module.exports = passport.use(
+    new GooogleStrategy({
+    //options for the google strategy
+      callbackURL:"/auth/google/redirect",
+      clientID: keys2.google.clientID,
+      clientSecret: keys2.google.clientSecret
+    }, (accessToken, refreshToken, profile, done) => {
+      //passport call back function.
+      console.log("passport callback function fired")
+      console.log(profile)
+      new User({
+        username: profile.displayName,
+        picture: profile.photos.value,
+        email: profile.emails.value
+      }).save().then((newUser) =>{
+        console.log("new user created:" + newUser)
+      })
+    })
+  )

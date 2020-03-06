@@ -1,5 +1,6 @@
 const passport = require("passport")
-
+const mongoose = require("mongoose")
+const authRoutes = require("./routes/auth")
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -23,14 +24,13 @@ app.use('/itineraries', require('./routes/itineraries'))
 app.use('/activities', require('./routes/activities'))
 app.use('/user', require('./routes/user'))
 app.use('/login', require('./routes/login'))
+app.use("/auth", require("./routes/auth"))
 //passport middleware
 app.use(passport.initialize());
 //passport configuration
 require("./passport/passport");
 
 const db = require('./keys').mongoURI;
-
-const mongoose = require("mongoose");
 
 mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to Mongo DB established'))
