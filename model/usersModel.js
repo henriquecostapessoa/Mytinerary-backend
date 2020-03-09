@@ -11,14 +11,23 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
       },
+    
+    googleAuth: {
+        type: Boolean,
+      },
+
+    loginUser: {
+      type: Boolean,
+    },
 
     password: {
         type: String,
-        required: function() { return this.type === ''; },
+        required: function validate() {if(this.googleAuth) {return(false)}else{return (true)}},
       },
     
     picture: {
         type: String,
       },
+    
 })
 module.exports = mongoose.model('user', userSchema) 

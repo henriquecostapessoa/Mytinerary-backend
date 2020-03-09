@@ -1,6 +1,6 @@
 const express = require('express');
 
-const loginModel = require('../model/loginModel')
+const login = require('../model/usersModel')
 
 const router = express.Router()
 
@@ -13,7 +13,7 @@ const passport = require("passport")
 router.post("/", (req, res) => {
     //login user
     console.log(req.body.password) 
-    const loginUser = new loginModel({
+    const loginUser = new usersModel({
 
       email: req.body.email,
       password: req.body.password
@@ -55,7 +55,7 @@ router.post("/", (req, res) => {
     "/",
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
-      loginModel
+      login
         .findOne({ _id: req.user.id })
         .then(user => {
           res.json(user);

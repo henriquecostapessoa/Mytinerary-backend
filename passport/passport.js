@@ -2,7 +2,7 @@ const express = require('express');
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
-const User = require("../model/loginModel");
+const User = require("../model/usersModel");
 const key = require("../keys");
 const passport = require("passport")
 const router = express.Router()
@@ -37,13 +37,22 @@ module.exports = passport.use(
     }, (accessToken, refreshToken, profile, done) => {
       //passport call back function.
       console.log("passport callback function fired")
-      console.log(profile)
-      new User({
+     
+     User.findOne({ email: profile.emails[0].value })
+     .then(user => { if(user){ user.loginUser = true
+      user.save().then(res => done(null, res))
+      console.log("if")
+      }
+       else{console.log("else")
+        const newUser = new User ({
         username: profile.displayName,
-        picture: profile.photos.value,
-        email: profile.emails.value
-      }).save().then((newUser) =>{
-        console.log("new user created:" + newUser)
-      })
+        picture: profile.photos[0].value,
+        email: profile.emails[0].value,
+        googleAuth: true
+       })
+       newUser.save().then(user => done(null, user))   
+      }
+     }) 
+      
     })
   )
