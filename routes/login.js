@@ -1,6 +1,6 @@
 const express = require('express');
 
-const login = require('../model/usersModel')
+const login = require('../model/loginModel')
 
 const router = express.Router()
 
@@ -13,7 +13,7 @@ const passport = require("passport")
 router.post("/", (req, res) => {
     //login user
     console.log(req.body.password) 
-    const loginUser = new usersModel({
+    const loginUser = new loginModel ({
 
       email: req.body.email,
       password: req.body.password

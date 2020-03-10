@@ -6,9 +6,18 @@ const User = require("../model/usersModel");
 const key = require("../keys");
 const passport = require("passport")
 const router = express.Router()
-const GooogleStrategy = require ("passport-google-oauth20")
 const keys2 = require("./keys2")
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  user.findById(id).then((user) => {
+    done(null, user);
+  });
+});
 
 
 const opts = {};
@@ -29,7 +38,7 @@ module.exports = passport.use(
   );
 
   module.exports = passport.use(
-    new GooogleStrategy({
+    new GoogleStrategy({
     //options for the google strategy
       callbackURL:"/auth/google/redirect",
       clientID: keys2.google.clientID,
