@@ -21,7 +21,35 @@ router.get("/google", passport.authenticate("google", {
 }))
 
 //callback route for google to redirect to
-router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
+router.get("/google/redirect", passport.authenticate("google", { session: false }), (req, res) => {
+    const user = req.user;
+    console.log(req.user)
+    user => {
+        const payload = {
+            id: user.id,
+            username: user.username,
+            picture: user.picture
+        };
+        const options = {expiresIn: 2592000};
+    jwt.sign(
+    payload,
+    key.secretOrKey,
+    options,
+    (err, token) => {
+    if(err){
+    res.json({
+    success: false,
+    token: "There was an error"
+    });
+    }else {
+    res.json({
+    success: true,
+    token: token
+    });
+    }
+    }
+    );
+      }
     res.send ("you reached the callback URL")
 })
 

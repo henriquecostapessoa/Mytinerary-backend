@@ -1,6 +1,6 @@
 const express = require('express');
 
-const login = require('../model/loginModel')
+const User = require('../model/usersModel')
 
 const router = express.Router()
 
@@ -9,18 +9,21 @@ const key = require("../keys");
 const jwt = require("jsonwebtoken");
 
 const passport = require("passport")
+const bcrypt = require('bcrypt');
 
 router.post("/", (req, res) => {
     //login user
     console.log(req.body.password) 
-    const loginUser = new loginModel ({
+    const loginUser = User ({
 
       email: req.body.email,
       password: req.body.password
      
     })
-          .save()
+          User.findOne({ email: req.body.email })
           .then(user => {
+            if (!user) return res.status(400).json({ msg: "User not exist" })
+            bcrypt.compare(req.body.password)
             const payload = {
                 id: user.id,
                 username: user.username,
