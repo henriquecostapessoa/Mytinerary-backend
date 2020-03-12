@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require("passport")
 const router = express.Router()
-
+const jwt = require("jsonwebtoken");
+const key = require("../keys")
 //auth login
 /* router.get("/loginpage", (req, res) =>{
     res.render("Loginpage")
@@ -23,8 +24,8 @@ router.get("/google", passport.authenticate("google", {
 //callback route for google to redirect to
 router.get("/google/redirect", passport.authenticate("google", { session: false }), (req, res) => {
     const user = req.user;
-    console.log(req.user)
-    user => {
+    
+   
         const payload = {
             id: user.id,
             username: user.username,
@@ -35,22 +36,14 @@ router.get("/google/redirect", passport.authenticate("google", { session: false 
     payload,
     key.secretOrKey,
     options,
+    
     (err, token) => {
-    if(err){
-    res.json({
-    success: false,
-    token: "There was an error"
-    });
-    }else {
-    res.json({
-    success: true,
-    token: token
-    });
-    }
+    
+        res.redirect("http://localhost:3000?token=" + token)
     }
     );
-      }
-    res.send ("you reached the callback URL")
+      
+   /*  res.send ("you reached the callback URL") */
 })
 
 
