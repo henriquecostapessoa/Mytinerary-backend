@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     picture: {
         type: String,
       },
+
+    favorites: {
+        type: Array,
+      },
     
 })
 module.exports = mongoose.model('user', userSchema) 

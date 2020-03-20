@@ -6,6 +6,35 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const key = require("../keys")
 
+router.get('/:userId',
+	(req, res) => {
+  		let favouriteRequested = req.params.userId;
+  		usersModel.find({ userId: favouriteRequested })
+			.then(favourite => {
+				res.send(favourite)
+			})
+			.catch(err => console.log(err));
+});
+
+router.post('/:id/add', (req, res) => {
+    
+    const newItinerary = new itineraryModel({
+        cityId: req.params.id,
+        title: req.body.title,
+        rating: req.body.rating,
+        duration: req.body.duration,
+        price: req.body.price,
+        hashtags: req.body.hashtags,
+        profilepicture: req.body.profilepicture
+    })
+    
+    newItinerary.save()
+      .then(itinerary => {
+      res.send(itinerary)
+      })
+      .catch(err => {
+      res.status(500).send("Server error")}) 
+});
 
 
 router.post("/", async (req, res) => {
