@@ -6,7 +6,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const key = require("../keys")
 
-router.get('/:userId',
+/* router.get('/:userId',
 	(req, res) => {
   		let favouriteRequested = req.params.userId;
   		usersModel.find({ userId: favouriteRequested })
@@ -14,27 +14,42 @@ router.get('/:userId',
 				res.send(favourite)
 			})
 			.catch(err => console.log(err));
-});
+}); */
 
-router.post('/:id/add', (req, res) => {
-    
-    const newItinerary = new itineraryModel({
-        cityId: req.params.id,
-        title: req.body.title,
-        rating: req.body.rating,
-        duration: req.body.duration,
-        price: req.body.price,
-        hashtags: req.body.hashtags,
-        profilepicture: req.body.profilepicture
-    })
-    
-    newItinerary.save()
-      .then(itinerary => {
-      res.send(itinerary)
-      })
+router.get(
+  "/:userId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    usersModel
+      .findOne({ _id: req.user._id })
+      .then(user => console.log(user))
       .catch(err => {
-      res.status(500).send("Server error")}) 
-});
+        res.status(404).json({ error: "User not found" });
+      });
+  }
+);
+
+router.post(
+  '/:id/add', 
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    usersModel
+    .findOne({ _id: req.user._id })
+    .then(user => {
+     let favorite = user.favourites.filter(favorite => favorite._id === req.params.id)
+     if(favorite.length !==0 ){
+        // handle already liked itinerary
+        favorite.push(itinerary)
+     }else{
+        // handle not liked itinerary
+        favorite
+     }
+    })
+    .catch(err => {
+      res.status(404).json({ error: "User not found" });
+    });
+    
+})
 
 
 router.post("/", async (req, res) => {
