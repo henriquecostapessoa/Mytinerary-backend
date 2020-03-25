@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require("passport")
 const usersModel = require('../model/usersModel')
+const itineraryModel = require('../model/itineraryModel')
 const jwt = require("jsonwebtoken");
 const router = express.Router()
 const bcrypt = require('bcrypt');
@@ -36,15 +37,28 @@ router.post(
     usersModel
     .findOne({ _id: req.user._id })
     .then(user => {
+      
      let favorite = user.favourites.filter(favorite => favorite._id === req.params.id)
-     if(favorite.length !==0 ){
+     console.log(req.params.id)
+     if(favorite.length === 0 ){
         // handle already liked itinerary
-        favorite.push(itinerary)
+     itineraryModel 
+     .findOne({_id: req.body.itineraryId})
+     console.log(req.body.itineraryId)
+     user.favourites.push({
+      itineraryId: req.body.itineraryId,
+      title: req.body.title,
+      cityId: req.body.id
+    });
+  
+      user.save()  
      }else{
         // handle not liked itinerary
-        favorite
+        res.status(404).json({ error: "User already liked this itinerary!" });
      }
+     console.log(user)
     })
+    
     .catch(err => {
       res.status(404).json({ error: "User not found" });
     });
