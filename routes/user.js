@@ -48,7 +48,7 @@ router.post(
      user.favourites.push({
       itineraryId: req.body.itineraryId,
       title: req.body.title,
-      cityId: req.body.id
+      cityId: req.body.cityId
     });
   
       user.save()  
