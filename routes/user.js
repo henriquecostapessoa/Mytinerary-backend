@@ -23,7 +23,7 @@ router.get(
   (req, res) => {
     usersModel
       .findOne({ _id: req.user._id })
-      .then(user => console.log(user))
+      .then(user => res.send(user))
       .catch(err => {
         res.status(404).json({ error: "User not found" });
       });
