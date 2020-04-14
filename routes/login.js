@@ -23,7 +23,8 @@ router.post("/", (req, res) => {
           User.findOne({ email: req.body.email })
           .then(user => {
             if (!user) return res.status(400).json({ msg: "User not exist" })
-            const dicrypt = bcrypt.compare(req.body.password)
+            const dicrypt = bcrypt.compare(req.body.password, user.password)
+            console.log(user)
             if (!dicrypt) return res.status(400).json({ msg: "User not exist" })
             const payload = {
                 id: user.id,
