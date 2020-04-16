@@ -65,6 +65,40 @@ router.post(
     
 })
 
+router.delete(
+  '/:id/delete', 
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    usersModel
+    .findOne({ _id: req.user._id })
+    .then(user => {
+      
+     let favorite = user.favourites.filter(favorite => favorite._id === req.params.id)
+     console.log(req.params.id)
+     if(favorite.length === 0 ){
+        // handle already liked itinerary
+     itineraryModel 
+     .findOne({_id: req.body.itineraryId})
+     console.log(req.body.itineraryId)
+     user.favourites.pop({
+      itineraryId: req.body.itineraryId,
+      title: req.body.title,
+      cityId: req.body.cityId
+    });
+  
+      user.save()  
+     }else{
+        // handle not liked itinerary
+        res.status(404).json({ error: "User already liked this itinerary!" });
+     }
+     console.log(user)
+    })
+    
+    .catch(err => {
+      res.status(404).json({ error: "User not found" });
+    });
+    
+})
 
 router.post("/", async (req, res) => {
   //create new user
