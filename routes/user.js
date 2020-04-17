@@ -65,28 +65,26 @@ router.post(
     
 })
 
-router.delete(
+router.post(
   '/:id/delete', 
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    
     usersModel
     .findOne({ _id: req.user._id })
     .then(user => {
       
-     let favorite = user.favourites.filter(favorite => favorite._id === req.params.id)
-     console.log(req.params.id)
-     if(favorite.length === 0 ){
+     let favoriteToDelete = user.favourites.filter(favorite => favorite.itineraryId === req.body.id)
+     
+     if(favoriteToDelete.length !== 0 ){
+      console.log(favoriteToDelete.length)
         // handle already liked itinerary
-     itineraryModel 
-     .findOne({_id: req.body.itineraryId})
-     console.log(req.body.itineraryId)
-     user.favourites.pop({
-      itineraryId: req.body.itineraryId,
-      title: req.body.title,
-      cityId: req.body.cityId
-    });
-  
-      user.save()  
+     const indexToDelete = user.favourites.map(myFav => 
+      myFav.itineraryId).indexOf(req.params.id)
+      user.favourites.splice(indexToDelete, 1)
+      user.save()
+      
+      
      }else{
         // handle not liked itinerary
         res.status(404).json({ error: "User already liked this itinerary!" });
