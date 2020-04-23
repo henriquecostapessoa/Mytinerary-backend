@@ -1,21 +1,12 @@
 const express = require('express');
-const passport = require("passport")
-const usersModel = require('../model/usersModel')
-const itineraryModel = require('../model/itineraryModel')
+const passport = require("passport");
+const usersModel = require('../model/usersModel');
+const itineraryModel = require('../model/itineraryModel');
 const jwt = require("jsonwebtoken");
-const router = express.Router()
+const router = express.Router();
 const bcrypt = require('bcrypt');
-const key = require("../keys")
+const key = require("../keys");
 
-/* router.get('/:userId',
-	(req, res) => {
-  		let favouriteRequested = req.params.userId;
-  		usersModel.find({ userId: favouriteRequested })
-			.then(favourite => {
-				res.send(favourite)
-			})
-			.catch(err => console.log(err));
-}); */
 
 router.get(
   "/:userId",
@@ -155,6 +146,5 @@ router.get(
       .catch(err => res.status(404).json({ error: "User does not exist!" }));
   }
 );
-
 
 module.exports = router

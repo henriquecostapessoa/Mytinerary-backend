@@ -1,14 +1,9 @@
 const express = require('express');
-
-const User = require('../model/usersModel')
-
-const router = express.Router()
-
+const User = require('../model/usersModel');
+const router = express.Router();
 const key = require("../keys");
-
 const jwt = require("jsonwebtoken");
-
-const passport = require("passport")
+const passport = require("passport");
 const bcrypt = require('bcrypt');
 
 router.post("/", (req, res) => {

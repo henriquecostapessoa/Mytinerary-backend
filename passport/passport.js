@@ -1,11 +1,8 @@
-const express = require('express');
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const mongoose = require("mongoose");
 const User = require("../model/usersModel");
 const key = require("../keys");
-const passport = require("passport")
-const router = express.Router()
+const passport = require("passport");
 const keys2 = require("./keys2")
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -64,4 +61,4 @@ module.exports = passport.use(
      }) 
       
     })
-  )
+  );

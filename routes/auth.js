@@ -1,12 +1,9 @@
 const express = require('express');
-const passport = require("passport")
-const router = express.Router()
+const passport = require("passport");
+const router = express.Router();
 const jwt = require("jsonwebtoken");
-const key = require("../keys")
-//auth login
-/* router.get("/loginpage", (req, res) =>{
-    res.render("Loginpage")
-}); */
+const key = require("../keys");
+
 
 //auth logout
 router.get("/logout", (req, res) =>{
@@ -43,8 +40,6 @@ router.get("/google/redirect", passport.authenticate("google", { session: false 
     }
     );
       
-   /*  res.send ("you reached the callback URL") */
 })
-
 
 module.exports = router;

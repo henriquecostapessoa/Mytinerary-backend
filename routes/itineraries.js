@@ -1,13 +1,6 @@
-const express = require('express')
-
-const itineraryModel = require('../model/itineraryModel')
-
-const router = express.Router()
-
-router.get('/test', (req, res) => {
-    res.send({ msg: 'Cities test route.' })
-
-})
+const express = require('express');
+const itineraryModel = require('../model/itineraryModel');
+const router = express.Router();
 
 router.get('/:cityId',
 	(req, res) => {

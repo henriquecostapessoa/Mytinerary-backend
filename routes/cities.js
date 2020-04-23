@@ -1,14 +1,6 @@
-const express = require('express')
-
-const router = express.Router()
-
-router.get('/test', (req, res) => {
-    res.send({ msg: 'Cities test route.' })
-
-})
-module.exports = router
-
-const cityModel = require('../model/cityModel')
+const express = require('express');
+const router = express.Router();
+const cityModel = require('../model/cityModel');
 
 /*get all cities*/
 router.get('/all',
@@ -33,3 +25,5 @@ router.get('/all',
           .catch(err => {
           res.status(500).send("Server error")}) 
     });
+
+    module.exports = router
