@@ -43,7 +43,7 @@ router.post(
     });
   
       user.save() 
-       
+      res.send(user.favourites) 
      }else{
         // handle not liked itinerary
         res.status(404).json({ error: "User already liked this itinerary!" });
@@ -68,7 +68,7 @@ router.post(
       
      let favoriteToDelete = user.favourites.filter(favorite => favorite.itineraryId === req.body.itineraryId)
      
-     if(favoriteToDelete.length !== 0 ){
+     if(favoriteToDelete.length > 0 ){
       console.log(favoriteToDelete.length)
         // handle already liked itinerary
      const indexToDelete = user.favourites.map(myFav => 
