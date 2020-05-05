@@ -29,6 +29,9 @@ const itinerarySchema = new mongoose.Schema({
         type: String,
         required: true
       },
-  
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref:'comment'
+    }]
 })
 module.exports = mongoose.model('itinerary', itinerarySchema)    

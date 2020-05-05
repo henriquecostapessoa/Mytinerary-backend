@@ -4,7 +4,6 @@ const router = express.Router();
 const Comment = require('../model/commentModel');
 const Itinerary = require('../model/itineraryModel');
 const ObjectId = require('objectid');
-const auth = require('../middleware/authMiddleware');
 const User = require('../model/usersModel');
 const passport = require("passport");
 
@@ -35,7 +34,31 @@ router.post('/:id/add', (req, res) => {
       res.status(500).send("Server error")}) 
 });
 
-/* router.get("/:itinerary/comments", auth, (req, res) => {
+const getUserById = async (id) => {
+    return await User.findOne({_id: id})
+}
+
+const modifyComment = async (comment) => {
+    const {author, body, itineraryId, date} = comment;
+    let user = await getUserById(ObjectId(author))
+    .then(user => { 
+            return { 
+            id: user._id,
+            userName: user.username,
+            img:user.picture
+            
+        }
+    })
+
+    return {
+        user,
+        body,
+        itineraryId,
+        date
+    }
+}; 
+
+router.get("/:itinerary/comments", passport.authenticate("jwt", { session: false }), (req, res) => {
     const {itinerary} = req.params
     console.log(req.params)
     if (!req.user.id) return res.status(401).send({"msg": "Please, log in to show the comments"})
@@ -55,48 +78,28 @@ router.post('/:id/add', (req, res) => {
     res.send(modifiedComments)
     })
     
-}) */
-
-/* const modifyComment = async (comment) => {
-    const {author, body, itineraryId, date} = comment;
-    let user = await getUserById(ObjectId(author))
-    .then(user => { 
-            return { 
-            id: user._id,
-            userName: user.userName,
-            img:user.img,
-            country: user.country,
-        }
-    })
-
-    return {
-        user,
-        body,
-        itineraryId,
-        date
-    }
-}; */
+})
 
 router.post("/itinerary/comments", passport.authenticate("jwt", { session: false }), (req, res) => {
 
     const newComment = new Comment({
         author: req.user.id,
-        itineraryId: req.itinerary.id,
+        itineraryId: req.body.itineraryId,
         body: req.body.body,
         date: req.date,
     });
     console.log(newComment)
-    console.log(req.body.itineraryId + "teste")
+    
 
-    /* newComment.save()
-        .then(comment => res.send("comment created", comment)) */
+    newComment.save()
+        .then(comment => res.send("comment created", comment))
 });
 
-/* router.delete('/itinerary/comments/:comment', auth, (req, res) => {
+router.delete('/itinerary/comments/:comment', passport.authenticate("jwt", { session: false }), (req, res) => {
     Comment
     .findOne({comment: req.params.id})
     .then(comment => comment.remove().then(comment => res.send("This comment has been successfully deleted", comment)))
     .catch(err => res.status(404).json({success:false}))
-}); */
+});
 
 module.exports = router
