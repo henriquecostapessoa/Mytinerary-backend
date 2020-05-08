@@ -92,7 +92,7 @@ router.post("/itinerary/comments", passport.authenticate("jwt", { session: false
     
 
     newComment.save()
-        .then(comment => res.send("comment created", comment))
+        .then(comment => res.status("comment created").send(comment))
 });
 
 router.delete('/itinerary/comments/:comment', passport.authenticate("jwt", { session: false }), (req, res) => {
