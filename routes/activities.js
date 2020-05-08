@@ -1,7 +1,7 @@
 const express = require('express');
 const activityModel = require('../model/activityModel');
 const router = express.Router();
-const Comment = require('../model/commentModel');
+const CommentModel = require('../model/commentModel');
 const Itinerary = require('../model/itineraryModel');
 const ObjectId = require('objectid');
 const User = require('../model/usersModel');
@@ -39,7 +39,7 @@ const getUserById = async (id) => {
 }
 
 const modifyComment = async (comment) => {
-    const {author, body, itineraryId, date} = comment;
+    const {author, text, itineraryId, date} = comment;
     let user = await getUserById(ObjectId(author))
     .then(user => { 
             return { 
@@ -52,7 +52,7 @@ const modifyComment = async (comment) => {
 
     return {
         user,
-        body,
+        text,
         itineraryId,
         date
     }
@@ -80,13 +80,27 @@ router.get("/:itinerary/comments", passport.authenticate("jwt", { session: false
     
 })
 
-router.post("/itinerary/comments", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get('/itinerary/comments/:id',
+	(req, res) => {
+        let commentsRequested = req.params.id
+  		CommentModel.find({ itineraryId: commentsRequested })
+			.then(comment => {
+				res.send(comment)
+			})
+            .catch(err => console.log(err));
+            
+});
 
+router.post("/itinerary/comments/add/:id", passport.authenticate("jwt", { session: false }), (req, res) => {
+console.log(req.user)
     const newComment = new Comment({
         author: req.user.id,
-        itineraryId: req.body.itineraryId,
-        body: req.body.body,
+        itineraryId: req.params.id,
+        text: req.body.text,
         date: req.date,
+        username: req.user.username,
+        img: req.user.picture
+
     });
     console.log(newComment)
     

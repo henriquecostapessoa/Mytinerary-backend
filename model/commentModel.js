@@ -7,6 +7,14 @@ const commentSchema = new mongoose.Schema({
         ref:'user'
     },
 
+    username: {
+        type: String
+    },
+
+    img: {
+        type: String
+    },
+
     itineraryId: {
         type: String, 
         
@@ -17,7 +25,10 @@ const commentSchema = new mongoose.Schema({
         default: Date.now
     },
 
-    body: String,
+    text: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = Comment = mongoose.model('comment', commentSchema)
