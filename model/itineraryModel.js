@@ -28,10 +28,6 @@ const itinerarySchema = new mongoose.Schema({
     cityId: {
         type: String,
         required: true
-      },
-    comments: {
-        type: Array, 
-        
-    }
+      }
 })
 module.exports = mongoose.model('itinerary', itinerarySchema)    

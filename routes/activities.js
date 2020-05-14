@@ -102,15 +102,16 @@ console.log(req.user)
         img: req.user.picture
 
     });
-    console.log(newComment)
+    
     
 
     newComment.save()
-        .then(comment => res.status("comment created").send(comment))
+        .then(comment => res.json(comment) )
 });
 
 router.delete('/itinerary/comments/:comment', passport.authenticate("jwt", { session: false }), (req, res) => {
-    Comment
+    
+    CommentModel
     .findOne({comment: req.params.id})
     .then(comment => comment.remove().then(comment => res.send("This comment has been successfully deleted", comment)))
     .catch(err => res.status(404).json({success:false}))
