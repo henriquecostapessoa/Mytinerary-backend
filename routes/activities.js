@@ -109,12 +109,18 @@ console.log(req.user)
         .then(comment => res.json(comment) )
 });
 
-router.delete('/itinerary/comments/:comment', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.delete('/itinerary/comments/:id', passport.authenticate("jwt", { session: false }), async (req, res) => {
     
-    CommentModel
-    .findOne({comment: req.params.id})
-    .then(comment => comment.remove().then(comment => res.send("This comment has been successfully deleted", comment)))
-    .catch(err => res.status(404).json({success:false}))
+    try { 
+        const comment = await CommentModel.findById(req.params.id)
+        if(!comment){return res.status(404).json({message: "comment not found"})}
+        if(comment.author.toString() !== req.user.id){return res.status(401).send("user not authorized")}
+        await comment.remove()
+        res.json("This comment has been successfully deleted")
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send("server.error")
+    } 
 });
 
 module.exports = router
