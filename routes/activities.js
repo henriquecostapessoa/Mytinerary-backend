@@ -106,7 +106,7 @@ console.log(req.user)
     
 
     newComment.save()
-        .then(comment => res.json(comment) )
+    res.json("This comment has been successfully posted")
 });
 
 router.delete('/itinerary/comments/:id', passport.authenticate("jwt", { session: false }), async (req, res) => {
@@ -117,6 +117,22 @@ router.delete('/itinerary/comments/:id', passport.authenticate("jwt", { session:
         if(comment.author.toString() !== req.user.id){return res.status(401).send("user not authorized")}
         await comment.remove()
         res.json("This comment has been successfully deleted")
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send("server.error")
+    } 
+});
+
+router.patch('/itinerary/comments/update/:id', passport.authenticate("jwt", { session: false }), async (req, res) => {
+    console.log(req.params.id)
+    try { 
+        const updateComment = await CommentModel.findById(req.params.id)
+        updateComment.text = req.body.text
+        if(!updateComment){return res.status(404).json({message: "comment not found"})}
+        if(updateComment.author.toString() !== req.user.id){return res.status(401).send("user not authorized")}
+        
+        updateComment.save()
+        res.json("This comment has been successfully updated")
     } catch (err) {
         console.log(err.message)
         res.status(500).send("server.error")
