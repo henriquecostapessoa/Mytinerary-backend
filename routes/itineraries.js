@@ -21,7 +21,8 @@ router.post('/:id/add', (req, res) => {
         duration: req.body.duration,
         price: req.body.price,
         hashtags: req.body.hashtags,
-        profilepicture: req.body.profilepicture
+        profilepicture: req.body.profilepicture,
+        map: req.body.map
     })
     
     newItinerary.save()

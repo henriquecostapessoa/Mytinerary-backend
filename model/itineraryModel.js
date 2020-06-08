@@ -25,6 +25,11 @@ const itinerarySchema = new mongoose.Schema({
     profilepicture: {
         type: String,
       },
+
+    map: {
+        type: String,
+      },
+      
     cityId: {
         type: String,
         required: true
