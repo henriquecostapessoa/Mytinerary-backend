@@ -28,7 +28,8 @@ router.post('/:id/add', (req, res) => {
     newItinerary.save()
       .then(itinerary => {
       res.send(itinerary)
-      })
+      }) 
+      
       .catch(err => {
         res.send(err.message )}) 
 });
