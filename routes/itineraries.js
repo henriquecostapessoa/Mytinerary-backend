@@ -30,7 +30,7 @@ router.post('/:id/add', (req, res) => {
       res.send(itinerary)
       })
       .catch(err => {
-      res.status(500).send("Server error")}) 
+        res.send(err.message )}) 
 });
 
 module.exports = router
