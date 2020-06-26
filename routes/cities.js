@@ -11,6 +11,15 @@ router.get('/all',
             })
             .catch(err => console.log(err));
     });
+
+    router.get('/:id',
+    (req, res) => {
+        cityModel.findOne({_id: req.params.id})
+            .then(files => {
+                res.send(files)
+            })
+            .catch(err => console.log(err));
+    });
     
     router.post('/', (req, res) => {
         const newCity = new cityModel({
