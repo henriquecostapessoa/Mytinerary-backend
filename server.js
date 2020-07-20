@@ -21,7 +21,7 @@ app.use(cors());
 
 const db = require('./keys').mongoURI;
 
-mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+mongoose.connect(process.env.mongoURI || db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
     .then(() => console.log('Connection to Mongo DB established'))
     .catch(err => console.log(err));
 
@@ -36,3 +36,8 @@ app.use('/activities', require('./routes/activities'))
 app.use('/user', require('./routes/user'))
 app.use('/login', require('./routes/login'))
 app.use("/auth", require("./routes/auth"))
+
+if(process.env.NODE_ENV === "production")
+{
+  app.use(express.static("myitinerary/build"))
+}

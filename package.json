@@ -5,6 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
+    "build": "cd myitinerary && npm run build",
+    "install-myitinerary": "cd myitinerary && npm install",
+    "heroku-postbuild": "npm run install-myitinerary && npm run build",
     "server": "nodemon Server",
     "client": "npm start --prefix myitinerary",
     "dev": "concurrently \"npm run server\" \"npm run client\""
